@@ -1,6 +1,7 @@
 'use strict';
-//var httpLoc = 'http://parleyvale.com:3000/api/';
-var httpLoc = 'http://localhost:3000/api/';
+var httpLoc = 'http://parleyvale.com:3000/api/';
+//var httpLoc = 'http://localhost:3000/api/';
+// var httpLoc = 'http://10.0.1.100:3000/api/';
 //var httpLoc = 'http://sitebuilt.net:3000/api/';
 
 /* Services */
@@ -350,7 +351,7 @@ stuffAppServices.factory('TokenService', ['$q', 'UserLS', function ($q, UserLS) 
             if (typeof name != 'undefined'){
                 //console.log('damn stil here')
                 var al =this.getAll();
-                if (al.userList.indexOf(name) >   -1){
+                if (al.userList && al.userList.indexOf(name) >   -1){
                     return true;
                 }
                 return false                 
@@ -663,10 +664,10 @@ stuffAppServices.factory('Users', ['Lists', '$http', '$q', function(Lists, $http
             var deferred = $q.defer();     
             $http.get(url).
                 success(function(data,status){
-                    //console.log(data)
-                    if(!data.message){
+                    console.log(data)
+                    if(data.message=='success'){
                         instance.reloadUser(data)                       
-                    }
+                    } 
                     s=data
                     deferred.resolve(data)
                 }).
@@ -771,11 +772,12 @@ stuffAppServices.factory('Users', ['Lists', '$http', '$q', function(Lists, $http
             localStorage.setItem('s2g_users', JSON.stringify(al));            
         },
         reloadUser: function(data){
-            al[al.activeUser]=data;
-            al.userList.push(data.name)
+            console.log('in reload user')
+            al[al.activeUser]=data.items;
+            al.userList.push(data.items.name)
             al.userList = _.uniq(al.userList);
             al.userList  = al.userList.filter(function(n){ return n != undefined });
-            //console.log(data);
+            console.log(al);
             localStorage.setItem('s2g_users', JSON.stringify(al));            
         },
         blankUser: {name: '', email: '', defaultLid: '', lists:[], role:'', timestamp: 1, apikey: ''},

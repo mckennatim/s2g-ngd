@@ -131,8 +131,8 @@ stuffAppControllers.controller('RegisterCtrl', ['$scope', '$http', 'AuthService'
     var auth= function(apikey, name){
         AuthService.auth(apikey, name).then(function(data){
             //console.log(data)
-            if(Object.keys(data)[0]=='message'){
-                response = data.message
+            if(data.message != 'token here'){
+                var response = data.message
                 console.log(data)
                 $scope.message = Users.setRegMessage(data.message);
                 $scope.apikey = '';
